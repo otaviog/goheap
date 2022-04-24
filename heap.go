@@ -50,11 +50,11 @@ func parent(node int) int {
 	if node == 0 {
 		return -1
 	}
-	return (node+1)/2 - 1
+	return (node+1)>>1 - 1
 }
 
 func firstChildren(node int) int {
-	return node*2 + 1
+	return node<<1 + 1
 }
 
 // Inserts a value into the heap. If its internal slice is full then it will append the element
@@ -69,13 +69,19 @@ func (heap *Heap[T]) Insert(value T) {
 
 	var burbleUp func(int)
 	burbleUp = func(node int) {
-		parentNode := parent(node)
-		if parentNode >= 0 {
+		for upValue := true; upValue; {
+			parentNode := parent(node)
+			if parentNode < 0 {
+				break
+			}
+
 			parentValue := heap.slice[parentNode]
 			val := heap.slice[node]
-			if !(heap.lessFunc(parentValue, val)) {
+
+			upValue = !heap.lessFunc(parentValue, val)
+			if upValue {
 				heap.slice[node], heap.slice[parentNode] = heap.slice[parentNode], heap.slice[node]
-				burbleUp(parentNode)
+				node = parentNode
 			}
 		}
 	}
@@ -98,23 +104,26 @@ func (heap *Heap[T]) Remove() (removedValue T, err error) {
 
 	var burbleDown func(int)
 	burbleDown = func(node int) {
-		nodeVal := heap.slice[node]
-		firstChild := firstChildren(node)
+		for downValue := true; downValue; {
+			nodeVal := heap.slice[node]
+			firstChild := firstChildren(node)
 
-		minK := -1
-		minVal := nodeVal
-		for k := 0; k < 2 && firstChild+k < heap.size; k++ {
-			childVal := heap.slice[firstChild+k]
-			if heap.lessFunc(childVal, minVal) {
-				minK = k
-				minVal = childVal
+			minK := -1
+			minVal := nodeVal
+			for k := 0; k < 2 && firstChild+k < heap.size; k++ {
+				childVal := heap.slice[firstChild+k]
+				if heap.lessFunc(childVal, minVal) {
+					minK = k
+					minVal = childVal
+				}
 			}
-		}
 
-		if minK > -1 {
-			child := firstChild + minK
-			heap.slice[node], heap.slice[child] = heap.slice[child], nodeVal
-			burbleDown(child)
+			downValue = minK > -1
+			if downValue {
+				child := firstChild + minK
+				heap.slice[node], heap.slice[child] = heap.slice[child], nodeVal
+				node = child
+			}
 		}
 	}
 
