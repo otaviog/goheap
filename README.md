@@ -1,7 +1,7 @@
 # Go Heap 
 
 This is a simple implementation of a heap data structure using Go and its generics.
-Not intend for production.
+Not intended for production.
 
 ## Usage
 
@@ -54,12 +54,12 @@ var persons = []Person{
 	},
 	{
 		age:   12,
-		name:  "Cris",
+		name:  "Chris",
 		phone: "555-2121",
 	},
 	{
 		age:   42,
-		name:  "Rochele",
+		name:  "Rochelle",
 		phone: "555-4421",
 	},
 }
@@ -70,13 +70,15 @@ heap.Insert(Person{age: 13, name: "Vicent", phone: "555-4211"})
 person, _ := heap.Remove()
 ```
 
+[Reference API](https://otaviog.github.io/goheap/).
+
 # Benchmarks
 
 Some benchmarks for the sake of completeness.
 
 ## Integer sorting
 
-For sorting integers, GoHeap's `Heapsort` with recursion had poor results when comparing with `sort.Ints` from Go's standard library:
+For sorting integers, GoHeap's `Heapsort` with recursion had poor results when compared with `sort.Ints` from Go's standard library:
 
 Next are the results for the version v1.0 with recursion:
 
