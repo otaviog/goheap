@@ -23,9 +23,11 @@ jobs:
         run: |
           go test -bench=.
       - name: Generate coverage Status
+        # From https://itnext.io/github-actions-code-coverage-without-third-parties-f1299747064d
         run: |
           set -x
           total=`go tool cover -func=coverage.out | grep total | grep -Eo '[0-9]+\.[0-9]+'`
+          
           curl "https://${GIT_USER}:${GIT_TOKEN}@api.github.com/repos/otaviog/goheap/statuses/${COMMIT_SHA}" -d "{\"state\": \"success\",\"target_url\": \"https://github.com/otaviog/goheap/pull/${PULL_NUMBER}/checks?check_run_id=${RUN_ID}\",\"description\": \"${total}%\",\"context\": \"code cov\"}"
         env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
