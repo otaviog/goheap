@@ -1,0 +1,35 @@
+name: ci
+on: [push]
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.18.0'
+      - name: Build
+        run: |
+          go build
+      - name: Unit tests
+        run: |
+          go test -race -covermode=atomic -coverprofile=coverage.out
+      - name: Archive coverage artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Raw coverage
+          path: coverage.out
+      - name: Benchmark
+        run: |
+          go test -bench=.
+      - name: Generate coverage Status
+        run: |
+          set -x
+          total=`go tool cover -func=coverage.out | grep total | grep -Eo '[0-9]+\.[0-9]+'`
+          curl "https://${GIT_USER}:${GIT_TOKEN}@api.github.com/repos/otaviog/goheap/statuses/${COMMIT_SHA}" -d "{\"state\": \"success\",\"target_url\": \"https://github.com/otaviog/goheap/pull/${PULL_NUMBER}/checks?check_run_id=${RUN_ID}\",\"description\": \"${total}%\",\"context\": \"code cov\"}"
+        env:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          GIT_USER: ${{ secrets.GIT_USER }}
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+          PULL_NUMBER: ${{ github.event.pull_request.number }}
+          RUN_ID: ${{ github.run_id }}
