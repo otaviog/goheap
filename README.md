@@ -72,9 +72,13 @@ person, _ := heap.Remove()
 
 # Benchmarks
 
+Some benchmarks for the sake of completeness.
+
 ## Integer sorting
 
-For sorting integers, GoHeap's `Heapsort` had poor results when comparing with `sort.Ints` from Go's standard library:
+For sorting integers, GoHeap's `Heapsort` with recursion had poor results when comparing with `sort.Ints` from Go's standard library:
+
+Next are the results for the version v1.0 with recursion:
 
 ```shell
 go test -bench=. -count=5
@@ -82,14 +86,34 @@ goos: linux
 goarch: amd64
 pkg: github.com/otaviog/goheap
 cpu: 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
-BenchmarkHeapsort-16                  16          73611175 ns/op
-BenchmarkHeapsort-16                  15          73011714 ns/op
-BenchmarkHeapsort-16                  15          73200773 ns/op
-BenchmarkHeapsort-16                  16          75392815 ns/op
-BenchmarkHeapsort-16                  15          72352460 ns/op
-BenchmarkStdSort-16                  330           3618156 ns/op
-BenchmarkStdSort-16                  336           3655944 ns/op
-BenchmarkStdSort-16                  334           3624276 ns/op
-BenchmarkStdSort-16                  328           3711837 ns/op
-BenchmarkStdSort-16                  334           3632133 ns/op
+BenchmarkHeapsort                  16          73611175 ns/op
+BenchmarkHeapsort                  15          73011714 ns/op
+BenchmarkHeapsort                  15          73200773 ns/op
+BenchmarkHeapsort                  16          75392815 ns/op
+BenchmarkHeapsort                  15          72352460 ns/op
+BenchmarkStdSort                  330           3618156 ns/op
+BenchmarkStdSort                  336           3655944 ns/op
+BenchmarkStdSort                  334           3624276 ns/op
+BenchmarkStdSort                  328           3711837 ns/op
+BenchmarkStdSort                  334           3632133 ns/op
+```
+
+And next are the results for the version v1.1 without recursion, still far from the standard library one:
+
+```shell
+go test -bench=. -count=5
+goos: linux
+goarch: amd64
+pkg: github.com/otaviog/goheap
+cpu: 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
+BenchmarkHeapsort                  26          46133913 ns/op
+BenchmarkHeapsort                  27          45261210 ns/op
+BenchmarkHeapsort                  26          44689030 ns/op
+BenchmarkHeapsort                  25          46688725 ns/op
+BenchmarkHeapsort                  26          47114640 ns/op
+BenchmarkStdSort                  333           3629980 ns/op
+BenchmarkStdSort                  316           3568491 ns/op
+BenchmarkStdSort                  340           3523823 ns/op
+BenchmarkStdSort                  336           3540776 ns/op
+BenchmarkStdSort                  340           3569386 ns/op
 ```
