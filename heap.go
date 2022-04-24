@@ -9,29 +9,37 @@ import (
 )
 
 // Generic heap structure
-type Heap[T constraints.Ordered] struct {
-	array     []T
-	size      int
-	less_func func(lfs, rhs T) bool
+type Heap[T any] struct {
+	slice    []T
+	size     int
+	lessFunc func(lfs, rhs T) bool
 }
 
+// The current capacity to store elements.
 func (obj Heap[T]) Capacity() int {
-	return len(obj.array)
+	return cap(obj.slice)
 }
 
+// The number of elements inside the heap.
 func (obj Heap[T]) Len() int {
 	return obj.size
 }
 
-func New[T constraints.Ordered](capacity int, less_func func(lfs, rhs T) bool) *Heap[T] {
-	heap := Heap[T]{make([]T, capacity), 0, less_func}
+// Creates a new heap data structure ordered by the lesser function lessFunc and
+// with optional starting values.
+func New[T any](lessFunc func(lfs, rhs T) bool, values ...T) *Heap[T] {
+	heap := Heap[T]{make([]T, 0), 0, lessFunc}
+	for _, v := range values {
+		heap.Insert(v)
+	}
 	return &heap
 }
 
-func MakeHeap[T constraints.Ordered](array []T, less_func func(lfs, rhs T) bool) Heap[T] {
-	heap := Heap[T]{array, 0, less_func}
+// Makes an existing slice an Heap ordered according to the lessFunc function.
+func MakeHeap[T any](slice []T, lessFunc func(lfs, rhs T) bool) Heap[T] {
+	heap := Heap[T]{slice, 0, lessFunc}
 
-	for _, v := range array {
+	for _, v := range slice {
 		heap.Insert(v)
 	}
 
@@ -49,30 +57,39 @@ func firstChildren(node int) int {
 	return node*2 + 1
 }
 
-func (heap *Heap[T]) Insert(val T) error {
-	if heap.size >= heap.Capacity() {
-		return errors.New("Heap capacity")
+// Inserts a value into the heap. If its internal slice is full then it will append the element
+// which breaks the pointer to the old slice.
+// Its time complexity is O(log N) swaps where N is the heap size.
+func (heap *Heap[T]) Insert(value T) {
+	if heap.size >= len(heap.slice) {
+		heap.slice = append(heap.slice, value)
+	} else {
+		heap.slice[heap.size] = value
 	}
-	heap.array[heap.size] = val
 
-	var burble_up func(int)
-	burble_up = func(node int) {
-		parent_node := parent(node)
-		if parent_node >= 0 {
-			parent_val := heap.array[parent_node]
-			val := heap.array[node]
-			if !(heap.less_func(parent_val, val)) {
-				heap.array[node], heap.array[parent_node] = heap.array[parent_node], heap.array[node]
-				burble_up(parent_node)
+	var burbleUp func(int)
+	burbleUp = func(node int) {
+		parentNode := parent(node)
+		if parentNode >= 0 {
+			parentValue := heap.slice[parentNode]
+			val := heap.slice[node]
+			if !(heap.lessFunc(parentValue, val)) {
+				heap.slice[node], heap.slice[parentNode] = heap.slice[parentNode], heap.slice[node]
+				burbleUp(parentNode)
 			}
 		}
 	}
 
-	burble_up(heap.size)
+	burbleUp(heap.size)
 	heap.size += 1
-	return nil
 }
 
+// Remove the lesser value from the heap, example:
+//  heap := MakeHeap([]int{8, 9, 4, 2, 7}, func(a, b int) bool { return a < b })
+//  value, _ := heap.Remove()
+//  value, _ := heap.Remove()
+// It should output 2 and 4. If the heap is empty, then returns an error.
+// Its time complexity is O(log N) where N is the heap size.
 func (heap *Heap[T]) Remove() (removedValue T, err error) {
 	if heap.size == 0 {
 		var zero T
@@ -81,14 +98,14 @@ func (heap *Heap[T]) Remove() (removedValue T, err error) {
 
 	var burbleDown func(int)
 	burbleDown = func(node int) {
-		nodeVal := heap.array[node]
+		nodeVal := heap.slice[node]
 		firstChild := firstChildren(node)
 
 		minK := -1
 		minVal := nodeVal
 		for k := 0; k < 2 && firstChild+k < heap.size; k++ {
-			childVal := heap.array[firstChild+k]
-			if heap.less_func(childVal, minVal) {
+			childVal := heap.slice[firstChild+k]
+			if heap.lessFunc(childVal, minVal) {
 				minK = k
 				minVal = childVal
 			}
@@ -96,27 +113,29 @@ func (heap *Heap[T]) Remove() (removedValue T, err error) {
 
 		if minK > -1 {
 			child := firstChild + minK
-			heap.array[node], heap.array[child] = heap.array[child], nodeVal
+			heap.slice[node], heap.slice[child] = heap.slice[child], nodeVal
 			burbleDown(child)
 		}
 	}
 
-	removedValue = heap.array[0]
-	heap.array[0], heap.size = heap.array[heap.size-1], heap.size-1
+	removedValue = heap.slice[0]
+	heap.slice[0], heap.size = heap.slice[heap.size-1], heap.size-1
 	burbleDown(0)
 
 	return
 }
 
-func HeapSort[T constraints.Ordered](array []T) {
-	heap := MakeHeap(array, func(lfs, rhs T) bool {
+// Sorts a slice in increasing order. Its time complexity is O(N log N) where N is the size of the
+// slice.
+func HeapSort[T constraints.Ordered](slice []T) {
+	heap := MakeHeap(slice, func(lfs, rhs T) bool {
 		return lfs > rhs
 	})
-	if len(array) < 2 {
+	if len(slice) < 2 {
 		return
 	}
 
-	for i := len(array) - 1; i >= 0; i-- {
-		array[i], _ = heap.Remove()
+	for i := len(slice) - 1; i >= 0; i-- {
+		slice[i], _ = heap.Remove()
 	}
 }

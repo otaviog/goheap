@@ -16,7 +16,6 @@ func TestParent(t *testing.T) {
 }
 
 func isHeap[T constraints.Ordered](heap Heap[T]) bool {
-
 	var _rec func(int) bool
 	_rec = func(node int) bool {
 		children := firstChildren(node)
@@ -24,7 +23,7 @@ func isHeap[T constraints.Ordered](heap Heap[T]) bool {
 		for k := 0; k < 2; k++ {
 			child := children + k
 			if child < heap.Len() {
-				if heap.array[child] < heap.array[node] {
+				if heap.slice[child] < heap.slice[node] {
 					return false
 				}
 			}
@@ -44,6 +43,19 @@ func isHeap[T constraints.Ordered](heap Heap[T]) bool {
 	return _rec(0)
 }
 
+func TestMakeHeap(t *testing.T) {
+	assert := assert.New(t)
+	heap := MakeHeap([]int{8, 2, 3, 9, 5, 4}, func(a, b int) bool { return a < b })
+	assert.True(isHeap(heap))
+	assert.Equal(6, heap.Len())
+}
+
+func TestNew(t *testing.T) {
+	assert := assert.New(t)
+	heap := New(func(a, b int) bool { return a < b }, 4, 1, 2, 4, 8, 0, 3)
+	assert.True(isHeap(*heap))
+	assert.Equal(7, heap.Len())
+}
 func TestInsertion(t *testing.T) {
 	assert := assert.New(t)
 	array := []int{8, 2, 3, 9, 5, 4}
@@ -51,14 +63,13 @@ func TestInsertion(t *testing.T) {
 
 	assert.Equal(0, heap.Len())
 	assert.Equal(len(array), heap.Capacity())
-	for i, v := range array {
-		err := heap.Insert(v)
+	for i, v := range append(array, []int{4, 9, 10, 11}...) {
+		heap.Insert(v)
 
-		assert.Nil(err)
 		assert.Equal(i+1, heap.Len())
 		assert.True(isHeap(heap))
 	}
-	assert.NotNil(heap.Insert(5))
+
 }
 
 func TestRemove(t *testing.T) {
@@ -81,35 +92,62 @@ func TestHeapsort(t *testing.T) {
 
 	array := []int{8, 2, 3, 9, 5, 4}
 	HeapSort(array)
-	assert.True(sort.IntsAreSorted(array), "bug in heapsort")
+	assert.True(sort.IntsAreSorted(array), "Bug in heapsort")
 
 	array = []int{}
 	HeapSort(array)
 
 	array = []int{4}
 	HeapSort(array)
+
+	for _, seed := range []int64{5212, 123123, 129852, 982811} {
+		rand := rand.New(rand.NewSource(seed))
+		unorderedSlice := make([]int, 1000000)
+		for i := 0; i < len(unorderedSlice); i++ {
+			unorderedSlice[i] = rand.Int()
+		}
+		HeapSort(unorderedSlice)
+		assert.True(sort.IntsAreSorted(unorderedSlice), "Bug in heapsort")
+	}
+
+	increasingOrder := [10000]int{}
+	for i := range increasingOrder {
+		increasingOrder[i] = i
+	}
+
+	HeapSort(increasingOrder[:])
+	assert.True(sort.IntsAreSorted(increasingOrder[:]), "Bug in heapsort [increasing sorted slice")
+
+	decreasingOrder := [10000]int{}
+	for i := range decreasingOrder {
+		decreasingOrder[len(decreasingOrder)-i-1] = i
+	}
+	HeapSort(decreasingOrder[:])
+	assert.True(sort.IntsAreSorted(decreasingOrder[:]), "Bug in heapsort [decreasing sorted slice")
+}
+
+func benchmarkSort(b *testing.B, sort_func func([]int)) {
+	b.StopTimer()
+	rand := rand.New(rand.NewSource(4444))
+	unorderedSlice := make([]int, 1000000)
+	for i := 0; i < len(unorderedSlice); i++ {
+		unorderedSlice[i] = rand.Int()
+	}
+
+	for i := 0; i < b.N; i++ {
+		b.StopTimer()
+		temporary_slice := make([]int, len(unorderedSlice))
+		copy(unorderedSlice, temporary_slice)
+		b.StartTimer()
+
+		sort_func(temporary_slice)
+	}
 }
 
 func BenchmarkHeapsort(b *testing.B) {
-	rand := rand.New(rand.NewSource(4444))
-	array := make([]int, 1000000)
-
-	for i := 0; i < b.N; i++ {
-		for i := 0; i < len(array); i++ {
-			array[i] = rand.Int()
-		}
-		HeapSort(array)
-	}
+	benchmarkSort(b, HeapSort[int])
 }
 
-func BenchmarkQuicksort(b *testing.B) {
-	rand := rand.New(rand.NewSource(4444))
-	array := make([]int, 1000000)
-
-	for i := 0; i < b.N; i++ {
-		for i := 0; i < len(array); i++ {
-			array[i] = rand.Int()
-		}
-		sort.IntsAreSorted(array)
-	}
+func BenchmarkStdSort(b *testing.B) {
+	benchmarkSort(b, sort.Ints)
 }
