@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>goheap - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.18.1";</script>
+<script src="../../../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="http://localhost:6060/pkg/">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="http://localhost:6060/pkg/">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package goheap
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/otaviog/goheap"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+goheap is a simple implementation of the heap data structure and sorting algorithm.
+Its intention is for learning purposes of the Go language.
+</p>
+
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="index.html#HeapSort">func HeapSort[T constraints.Ordered](slice []T)</a></dd>
+			
+			
+				
+				<dd><a href="index.html#Heap">type Heap</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#MakeHeap">func MakeHeap[T any](slice []T, lessFunc func(lfs, rhs T) bool) Heap[T]</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#New">func New[T any](lessFunc func(lfs, rhs T) bool, values ...T) *Heap[T]</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#Heap.Capacity">func (obj Heap[T]) Capacity() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#Heap.Insert">func (heap *Heap[T]) Insert(value T)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#Heap.Len">func (obj Heap[T]) Len() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#Heap.Remove">func (heap *Heap[T]) Remove() (removedValue T, err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go">heap.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+		
+			
+			
+			<h2 id="HeapSort">func <a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go?s=3304:3351#L129">HeapSort</a>
+				<a class="permalink" href="index.html#HeapSort">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func HeapSort[T <a href="http://localhost:6060/pkg/golang.org/x/exp/constraints/">constraints</a>.<a href="http://localhost:6060/pkg/golang.org/x/exp/constraints/#Ordered">Ordered</a>](slice []T)</pre>
+			<p>
+Sorts a slice in increasing order. Its time complexity is O(N log N) where N is the size of the
+slice.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Heap">type <a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go?s=246:333#L2">Heap</a>
+				<a class="permalink" href="index.html#Heap">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Generic heap structure
+</p>
+
+			<pre>type Heap[T <a href="http://localhost:6060/pkg/builtin/#any">any</a>] struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="MakeHeap">func <a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go?s=909:980#L29">MakeHeap</a>
+					<a class="permalink" href="index.html#MakeHeap">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func MakeHeap[T <a href="http://localhost:6060/pkg/builtin/#any">any</a>](slice []T, lessFunc func(lfs, rhs T) <a href="http://localhost:6060/pkg/builtin/#bool">bool</a>) <a href="index.html#Heap">Heap</a>[T]</pre>
+				<p>
+Makes an existing slice an Heap ordered according to the lessFunc function.
+</p>
+
+				
+				
+			
+				
+				<h3 id="New">func <a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go?s=649:718#L20">New</a>
+					<a class="permalink" href="index.html#New">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func New[T <a href="http://localhost:6060/pkg/builtin/#any">any</a>](lessFunc func(lfs, rhs T) <a href="http://localhost:6060/pkg/builtin/#bool">bool</a>, values ...T) *<a href="index.html#Heap">Heap</a>[T]</pre>
+				<p>
+Creates a new heap data structure ordered by the lesser function lessFunc and
+with optional starting values.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Heap.Capacity">func (Heap[T]) <a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go?s=378:411#L9">Capacity</a>
+					<a class="permalink" href="index.html#Heap.Capacity">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (obj <a href="index.html#Heap">Heap</a>[T]) Capacity() <a href="http://localhost:6060/pkg/builtin/#int">int</a></pre>
+				<p>
+The current capacity to store elements.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Heap.Insert">func (*Heap[T]) <a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go?s=1438:1474#L53">Insert</a>
+					<a class="permalink" href="index.html#Heap.Insert">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (heap *<a href="index.html#Heap">Heap</a>[T]) Insert(value T)</pre>
+				<p>
+Inserts a value into the heap. If its internal slice is full then it will append the element
+which breaks the pointer to the old slice.
+Its time complexity is O(log N) swaps where N is the heap size.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Heap.Len">func (Heap[T]) <a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go?s=483:511#L14">Len</a>
+					<a class="permalink" href="index.html#Heap.Len">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (obj <a href="index.html#Heap">Heap</a>[T]) Len() <a href="http://localhost:6060/pkg/builtin/#int">int</a></pre>
+				<p>
+The number of elements inside the heap.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Heap.Remove">func (*Heap[T]) <a href="http://localhost:6060/src/github.com/otaviog/goheap/heap.go?s=2376:2433#L89">Remove</a>
+					<a class="permalink" href="index.html#Heap.Remove">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (heap *<a href="index.html#Heap">Heap</a>[T]) Remove() (removedValue T, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Remove the lesser value from the heap, example:
+</p>
+<pre>heap := MakeHeap([]int{8, 9, 4, 2, 7}, func(a, b int) bool { return a &lt; b })
+value, _ := heap.Remove()
+value, _ := heap.Remove()
+</pre>
+<p>
+It should output 2 and 4. If the heap is empty, then returns an error.
+Its time complexity is O(log N) where N is the heap size.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.18.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>
