@@ -125,6 +125,43 @@ func TestHeapsort(t *testing.T) {
 	HeapSort(decreasingOrder[:])
 	assert.True(sort.IntsAreSorted(decreasingOrder[:]), "Bug in heapsort [decreasing sorted slice")
 }
+func TestCustomType(t *testing.T) {
+	assert := assert.New(t)
+
+	type Person struct {
+		age   int
+		name  string
+		phone string
+	}
+	var persons = []Person{
+		{
+			age:   45,
+			name:  "Julius",
+			phone: "555-5755",
+		},
+		{
+			age:   12,
+			name:  "Cris",
+			phone: "555-2121",
+		},
+		{
+			age:   42,
+			name:  "Rochele",
+			phone: "555-4421",
+		},
+	}
+
+	heap := MakeHeap(persons, func(p1, p2 Person) bool {
+		return p1.age < p2.age
+	})
+	heap.Insert(Person{age: 13, name: "Vicent", phone: "555-4211"})
+
+	person, _ := heap.Remove()
+	assert.Equal(12, person.age)
+
+	person, _ = heap.Remove()
+	assert.Equal(13, person.age)
+}
 
 func benchmarkSort(b *testing.B, sort_func func([]int)) {
 	b.StopTimer()
@@ -134,9 +171,10 @@ func benchmarkSort(b *testing.B, sort_func func([]int)) {
 		unorderedSlice[i] = rand.Int()
 	}
 
+	temporary_slice := make([]int, len(unorderedSlice))
+
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
-		temporary_slice := make([]int, len(unorderedSlice))
 		copy(unorderedSlice, temporary_slice)
 		b.StartTimer()
 
