@@ -1,13 +1,14 @@
 # Go Heap 
 
-This is a simple implementation of a heap data structure using Go and its generics. Not intend for production.
+This is a simple implementation of a heap data structure using Go and its generics.
+Not intend for production.
 
 ## Usage
 
 Install:
 
 ```shell
-go get https://github.com/otaviog/goheap
+go get github.com/otaviog/goheap
 ```
 
 Create a new heap:
@@ -40,34 +41,33 @@ HeapSort(unorderedSlice)
 Usage with custom types:
 
 ```go
-    type Person struct {
-		age   int
-		name  string
-		phone string
-	}
-	var persons = []Person{
-		{
-			age:   45,
-			name:  "Julius",
-			phone: "555-5755",
-		},
-		{
-			age:   12,
-			name:  "Cris",
-			phone: "555-2121",
-		},
-		{
-			age:   42,
-			name:  "Rochele",
-			phone: "555-4421",
-		},
-	}
-
-	heap := MakeHeap(persons, func(p1, p2 Person) bool {
-		return p1.age < p2.age
-	})
-	heap.Insert(Person{age: 13, name: "Vicent", phone: "555-4211"})
-    person, _ := heap.Remove()
+type Person struct {
+	age   int
+	name  string
+	phone string
+}
+var persons = []Person{
+	{
+		age:   45,
+		name:  "Julius",
+		phone: "555-5755",
+	},
+	{
+		age:   12,
+		name:  "Cris",
+		phone: "555-2121",
+	},
+	{
+		age:   42,
+		name:  "Rochele",
+		phone: "555-4421",
+	},
+}
+heap := MakeHeap(persons, func(p1, p2 Person) bool {
+	return p1.age < p2.age
+})
+heap.Insert(Person{age: 13, name: "Vicent", phone: "555-4211"})
+person, _ := heap.Remove()
 ```
 
 # Benchmarks
